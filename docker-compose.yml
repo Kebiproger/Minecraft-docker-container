@@ -1,0 +1,53 @@
+services:
+  mc-server:
+    image: itzg/minecraft-server
+    stdin_open: true
+    tty: true
+    
+    container_name: mc-server
+    restart: unless-stopped
+    ports:
+      - "25565:25565"
+    user: "1000:1000"  # чтобы был доступ к файлам из-под хоста (скрипт)
+    environment:
+      UID: 1000 # чтобы был доступ к файлам из-под хоста (скрипт)
+      GID: 1000
+
+      SEED: "6384570807647633816"
+
+      EULA: "TRUE"
+      VERSION: "1.20.1"     
+      TYPE: "FABRIC"        
+      MEMORY: "3G"          
+      ONLINE_MODE: "FALSE"
+      FORCE_CONFIG: "TRUE" 
+      JVM_OPTS: "-XX:+UseG1GC -XX:MaxGCPauseMillis=50 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1"
+      
+      ALLOW_NETHER: "TRUE"  
+      ALLOW_END: "TRUE"     
+      SPAWN_ANIMALS: "TRUE" 
+      SPAWN_MONSTERS: "TRUE" 
+      DIFFICULTY: "normal"   
+      FORCE_GAMEMODE: "TRUE"
+      MODE: "creative"
+
+      GENERATE_STRUCTURES: "TRUE" 
+      MAX_PLAYERS: 5         
+      
+     
+      VIEW_DISTANCE: 10      # Дальность прорисовки сервера (10 - стандарт)
+      MAX_TICK_TIME: 60000   # Чтобы сервер не крашился при лагах
+
+      CREATE_CONSOLE_IN_PIPE: "true"
+    
+    entrypoint: /scripts/init.sh
+    volumes:
+      - ./data:/data         # Тут будет лежать мир и конфиги
+      - ./init.sh:/scripts/init.sh:ro  # Скрипт инициализации (если нужен)
+    
+    
+    cpuset: "12-15" # specify CPU cores to use (adjust as needed)
+    deploy:
+      resources:
+        limits:      
+          memory: 3.5G   # A little more than the server memory allocation
