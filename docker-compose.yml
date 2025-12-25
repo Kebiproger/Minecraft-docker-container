@@ -33,7 +33,6 @@ services:
 
       GENERATE_STRUCTURES: "TRUE" 
       MAX_PLAYERS: 5         
-      
      
       VIEW_DISTANCE: 10      # Дальность прорисовки сервера (10 - стандарт)
       MAX_TICK_TIME: 60000   # Чтобы сервер не крашился при лагах
@@ -44,7 +43,6 @@ services:
     volumes:
       - ./data:/data         # Тут будет лежать мир и конфиги
       - ./init.sh:/scripts/init.sh:ro  # Скрипт инициализации (если нужен)
-    
     
     cpuset: "12-15" # specify CPU cores to use (adjust as needed)
     deploy:
