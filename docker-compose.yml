@@ -39,12 +39,13 @@ services:
 
       CREATE_CONSOLE_IN_PIPE: "true"
     
-    entrypoint: /scripts/init.sh
+    command: /scripts/init.sh
     volumes:
       - ./data:/data         # Тут будет лежать мир и конфиги
-      - ./init.sh:/scripts/init.sh:ro  # Скрипт инициализации (если нужен)
+      - ./server-mods:/data/mods  # Тут будут моды
+
     
-    cpuset: "12-15" # specify CPU cores to use (adjust as needed)
+    cpuset: "1-4" # specify CPU cores to use (adjust as needed)
     deploy:
       resources:
         limits:      
